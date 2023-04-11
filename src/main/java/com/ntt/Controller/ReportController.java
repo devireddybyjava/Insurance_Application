@@ -36,6 +36,15 @@ public class ReportController {
 		response.addHeader("content-Disposition", "attachment; filename=plans.xls");
 		reportService.exportExcel(response);
 	}
+	
+	@GetMapping("/pdf")
+	public void pdfExport(HttpServletResponse response) throws Exception{
+		response.setContentType("application/pdf");
+		response.addHeader("Content-Disposition", "attachment; filename=plans.pdf");
+		reportService.exportPdf(response);
+	}
+
+	
 
 	private void init(Model model) {
 		model.addAttribute("search", new SearchRequest());
