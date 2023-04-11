@@ -111,7 +111,7 @@
 		</table>
 		<hr />
 
-		Export: <a href="">EXCEL</a>
+		Export: <a href="excel">EXCEL</a>
 		<td></td>
 		<td></td>
 		<td></td>

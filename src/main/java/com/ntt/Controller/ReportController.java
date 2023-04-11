@@ -2,6 +2,8 @@ package com.ntt.Controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,6 +29,12 @@ public class ReportController {
 		// (Or)
 		init(model);
 		return "index";
+	}
+	@GetMapping("/excel")
+	public void excelExport(HttpServletResponse response) throws Exception{
+		response.setContentType("application/octet-steam");
+		response.addHeader("content-Disposition", "attachment; filename=plans.xls");
+		reportService.exportExcel(response);
 	}
 
 	private void init(Model model) {
