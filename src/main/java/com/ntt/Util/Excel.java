@@ -36,8 +36,34 @@ public class Excel {
 	     headerRow.createCell(5).setCellValue("Plan End Date");
 	     headerRow.createCell(6).setCellValue("Benefit Amount");
 	     
-	     FileOutputStream fout=new FileOutputStream(f);    
-           
+	     int dataRowIndex=1;
+	     for (CitizenPlan plan: plans) {
+	    	 Row datarow=sheet.createRow(dataRowIndex);
+	    	 datarow.createCell(0).setCellValue(plan.getCitizenId());
+	    	 datarow.createCell(1).setCellValue(plan.getCitizenName());
+	    	 datarow.createCell(2).setCellValue(plan.getCitizenPlanName());
+	    	 datarow.createCell(3).setCellValue(plan.getCitizenPlanStatus());
+	    	 if(null!=plan.getCitizenPlanStartDate()) {
+	    	 
+	    	 datarow.createCell(4).setCellValue(plan.getCitizenPlanStartDate()+"");
+	    	 }else {
+	    		 datarow.createCell(4).setCellValue("N/A");
+	    	 }
+	    	 if(null!=plan.getCitizenPlanEndDate()) {
+	        	 
+	    	 datarow.createCell(5).setCellValue(plan.getCitizenPlanEndDate()+"");
+	    	 }
+	    	 else {
+	    		 datarow.createCell(5).setCellValue("N/A");
+	    	 }
+	        	 
+	        	 datarow.createCell(6).setCellValue(plan.getCitizenBenefitAmount());
+	    	dataRowIndex++;
+	 
+	    	 }
+	     
+	     FileOutputStream fout=new FileOutputStream(new File("Plans.xls"));    
+           workbook.write(fout);
          fout.close();   
 	     
 	     

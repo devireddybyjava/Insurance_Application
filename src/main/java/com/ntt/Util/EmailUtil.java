@@ -2,7 +2,6 @@ package com.ntt.Util;
 
 import java.io.File;
 
-import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;

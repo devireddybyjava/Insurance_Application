@@ -3,14 +3,8 @@ package com.ntt.ServiceImpl;
 import java.io.File;
 import java.util.List;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
@@ -25,6 +19,7 @@ import com.ntt.Entity.CitizenPlan;
 import com.ntt.Service.ReportService;
 import com.ntt.Util.EmailUtil;
 import com.ntt.Util.Excel;
+import com.ntt.Util.Pdf;
 import com.ntt.repo.CitizenPlanRepository;
 
 @Service
@@ -35,6 +30,9 @@ public class ReportServiceImpl implements ReportService {
 
 	@Autowired
 	private Excel excel;
+	
+	@Autowired
+	private Pdf pf;
 
 	@Autowired
 	private EmailUtil emailUtils;
@@ -82,8 +80,8 @@ public class ReportServiceImpl implements ReportService {
 		List<CitizenPlan> plans = planRepository.findAll();
 		excel.excelGenerator(response, plans, f);
 		String sub = "System Generated Mail";
-		String body = "<h5>Good Afternoon, Prathyusha<h5>," + " <h5>Hope you are well...!</h5>,"+"<p>This mail is system generated mail,you won't be reply to this mail,Please ignore this mail ...{::)</p>";
-		String to = "prathyushasanga2408@gmail.com";
+		String body = "<h5>Good Afternoon,Param<h5>,<h5>Hope you are well...!</h5>,<h6>This mail is system generated mail,you won't be reply to this mail,Please ignore this mail ...{::)</h6>";
+		String to = "vennelareddy747@gmail.com";
 		emailUtils.sendEmail(sub, body, to, f);
 		f.delete();
 		return true;
@@ -91,30 +89,14 @@ public class ReportServiceImpl implements ReportService {
 
 	@Override
 	public boolean exportPdf(HttpServletResponse response) throws Exception {
-		Document document = new Document(PageSize.A4);
-		PdfWriter.getInstance(document, response.getOutputStream());
-		document.open();
-		Paragraph p = new Paragraph("Citizen plan info");
-		document.add(p);
-		PdfPTable table = new PdfPTable(6);
-		table.addCell("Id");
-		table.addCell("Citizen Name");
-		table.addCell("Plan Name");
-		table.addCell("Plan Status");
-		table.addCell("Start Date");
-		table.addCell("End Date");
-
-		List<CitizenPlan> records = planRepository.findAll();
-		for (CitizenPlan plan : records) {
-			table.addCell(String.valueOf(plan.getCitizenId()));
-			table.addCell(plan.getCitizenName());
-			table.addCell(plan.getCitizenPlanName());
-			table.addCell(plan.getCitizenPlanStatus());
-			table.addCell(plan.getCitizenPlanStartDate() + "");
-			table.addCell(plan.getCitizenPlanEndDate() + "");
-		}
-		document.add(table);
-		document.close();
+		File f = new File("plans.pdf");
+		List<CitizenPlan> plans = planRepository.findAll();
+		pf.pdfGenertor(response, plans, f);
+		String sub = "System Generated Mail";
+		String body = "<h6>This mail is system generated mail,you won't be reply to this mail,Please ignore this mail ...{::)</h6>";
+		String to = "vennelareddy747@gmail.com";
+		emailUtils.sendEmail(sub, body, to, f);
+		f.delete();
 		return true;
 	}
 
